@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import InteractiveMap from './components/InteractiveMap';
@@ -360,6 +361,9 @@ export default function App() {
           </motion.button>
         )}
       </AnimatePresence>
+
+      {/* Vercel Speed Insights */}
+      <SpeedInsights />
 
     </div>
   );
