@@ -166,7 +166,7 @@ export default function ContactView() {
               viewport={{ once: true }}
               whileHover={{ y: -4 }}
               transition={{ duration: 0.5, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="relative z-10 -mt-16 mx-4 sm:mx-6 bg-white rounded-2xl p-6 sm:p-7 flex flex-col gap-5 shadow-[0_20px_50px_-15px_rgba(0,58,120,0.35)] ring-1 ring-[#003A78]/5 border-t-[3px] border-[#C23A4A]"
+              className="relative z-10 lg:-mt-94  mx-4 sm:mx-6 bg-white rounded-2xl p-6 sm:p-7 flex flex-col gap-5 shadow-[0_20px_50px_-15px_rgba(0,58,120,0.35)] ring-1 ring-[#003A78]/5 border-t-[3px] border-[#C23A4A]"
             >
               <ContactRow icon={<MapPin className="w-4 h-4 text-[#2B86C5]" />} label="Corporate HQ Address">
                 Plot No. 52-71, Gouri Meadows II, Wing-B, Behind Indian Oil Petrol Pump, Besa Square, New Nagpur, Maharashtra
@@ -191,7 +191,7 @@ export default function ContactView() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-8 p-7 rounded-2xl flex flex-col gap-4 bg-white border border-slate-200"
+              className="lg:mt-18 p-7 rounded-2xl flex flex-col gap-4 bg-white border border-slate-200"
             >
               <div className="flex items-center gap-2">
                 <Navigation className="w-4 h-4 text-[#2B86C5]" />

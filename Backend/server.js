@@ -10,7 +10,13 @@ dotenv.config({ path: "./config.env" })
 const app = express();
 const port = process.env.port || 8000;
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://4-pillars-realty.vercel.app"
+    ],
+    credentials: true
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
