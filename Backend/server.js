@@ -13,7 +13,9 @@ const port = process.env.port || 8000;
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://4-pillars-realty.vercel.app"
+        "https://4-pillars-realty.vercel.app",
+        "https://4-pillars-realty-r7dc.vercel.app",
+        /\.vercel\.app$/
     ],
     credentials: true
 }));
