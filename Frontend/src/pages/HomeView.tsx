@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import {
   motion,
   useScroll,
@@ -39,11 +40,8 @@ import {
   Landmark,
 } from "lucide-react";
 
-/* ─── TYPES ─────────────────────────────────────────────────────────────── */
 interface HomeViewProps {
-  onSelectProject: (slug: string) => void;
   openLeadModal: (projectSlug: string, initialMessage?: string) => void;
-  onChangeRoute: (route: string) => void;
   accessibilityTextSize: "sm" | "md" | "lg" | "xl";
   lightMode: boolean;
 }
@@ -319,7 +317,6 @@ function FeatureItem({ card, delay }: { card: FeatureCard; delay: number }) {
         boxShadow: hov ? `0 20px 50px -10px ${card.accent}28` : "none",
       }}
     >
-      
       <div
         style={{
           width: 52,
@@ -382,13 +379,11 @@ function FeatureItem({ card, delay }: { card: FeatureCard; delay: number }) {
 }
 
 /* ─── MAIN COMPONENT ─────────────────────────────────────────────────────── */
-export default function HomeView({
-  onSelectProject,
-  openLeadModal,
-  onChangeRoute,
-  accessibilityTextSize,
-  lightMode,
-}: HomeViewProps) {
+export default function HomeView() {
+  const { openLeadModal, accessibilityTextSize, lightMode } = useOutletContext<HomeViewProps>();
+  const navigate = useNavigate();
+  const onSelectProject = (slug: string) => navigate(`/${slug}`);
+  const onChangeRoute = (route: string) => navigate(`/${route}`);
   const [heroTab, setHeroTab] = useState<"project" | "work" | "benefits">(
     "project",
   );
@@ -497,7 +492,7 @@ export default function HomeView({
             >
               {/* Rotating Text */}
               <motion.div
-                className="text-4xl md:text-5xl font-bold text-white/80 h-10 flex items-center justify-center"
+                className="text-2xl sm:text-4xl md:text-5xl font-bold text-white/80 h-10 flex items-center justify-center"
                 key={rotatingText}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -512,10 +507,9 @@ export default function HomeView({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-lg text-white/70 leading-relaxed mx-auto"
+                className="text-sm sm:text-lg text-white/70 leading-relaxed mx-auto px-2"
               >
                 Experience premium gated living with world-class amenities and
-                <br />
                 strong appreciation potential in Nagpur's prime locations.
               </motion.p>
 
@@ -566,7 +560,7 @@ export default function HomeView({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="flex items-center justify-center gap-8 pt-8 border-t border-white/20"
+                className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 pt-8 border-t border-white/20"
               >
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-blue-400" />
@@ -610,12 +604,12 @@ export default function HomeView({
           overflow: "hidden",
         }}
       >
-        <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 " }}>
+        <div style={{ maxWidth: 1060, margin: "0 auto", padding: "0 16px" }}>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 80,
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: 48,
               alignItems: "center",
             }}
           >
@@ -906,7 +900,7 @@ export default function HomeView({
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(4,1fr)",
+                gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
                 gap: 16,
               }}
             >
@@ -938,7 +932,6 @@ export default function HomeView({
           >
             Our Signature Projects
           </motion.h2>
-
         </motion.div>
 
         {/* Background Elements */}
@@ -972,7 +965,7 @@ export default function HomeView({
                   initial={{ opacity: 0, y: 60 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: 1.2 + idx * 0.2 }}
+                  transition={{ duration: 0.8, delay: 0.1 + idx * 0.2 }}
                   whileHover={{ y: -8 }}
                 >
                   {/* Base color block */}
@@ -1271,7 +1264,6 @@ export default function HomeView({
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            
             <motion.h2
               className={`font-serif font-black tracking-tight text-slate-900 ${textSz.h2} mb-4`}
               initial={{ opacity: 0, y: 30 }}
@@ -1475,383 +1467,207 @@ export default function HomeView({
       </section>
 
       <section
-        className="relative py-32 text-center overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white"
-        aria-label="Book your site visit"
+        aria-label="Contact and site visit"
+        className="relative min-h-screen overflow-hidden flex items-center px-4 sm:px-8 py-16 font-[Inter]"
+        style={{
+          background:
+            "linear-gradient(135deg, #0a1628 0%, #0f2347 40%, #132a52 70%, #0d1f3c 100%)",
+        }}
       >
-        {/* Enhanced Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 right-20 w-96 h-96 bg-gradient-to-r from-blue-500/15 to-cyan-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-32 left-16 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-full blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
-        </div>
+        {/* grid overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(56,139,253,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,139,253,0.04) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
+          }}
+        />
 
-        {/* Video Background */}
-        <div className="absolute inset-0 opacity-20">
-          <img
-            src="/images/project_melbourne_png_1780484693295.png"
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
+        {/* glow blobs */}
+        <div
+          className="absolute -top-[120px] -right-20 w-[480px] h-[480px] rounded-full pointer-events-none animate-[blobFloat_8s_ease-in-out_infinite]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(56,139,253,0.12) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-[100px] -left-[60px] w-[360px] h-[360px] rounded-full pointer-events-none animate-[blobFloat_10s_ease-in-out_infinite_reverse]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(100,200,255,0.07) 0%, transparent 70%)",
+          }}
+        />
 
-        {/* Animated Rings */}
-        {[1, 2, 3].map((ring) => (
-          <motion.div
-            key={ring}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.1, 0] }}
-            transition={{ duration: 4, delay: ring * 1.2, repeat: Infinity }}
-          >
-            <div
-              className="rounded-full border border-cyan-400/20"
-              style={{ width: ring * 200, height: ring * 200 }}
-            />
-          </motion.div>
-        ))}
-
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Left Column - Content */}
-            <div className="text-left space-y-8">
-              <motion.span
-                className="inline-flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-[0.25em] font-mono bg-cyan-500/10 border border-cyan-500/20 px-4 py-2 rounded-full"
-                initial={{ scale: 0.8, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <Eye className="w-4 h-4" />
-                Ready to Invest?
-              </motion.span>
-
-              <motion.h2
-                className="font-serif font-black text-4xl sm:text-6xl tracking-tight text-white leading-tight"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-              >
-                Book Your{" "}
-                <span className="relative inline-block">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-300">
-                    Site Visit
-                  </span>
-                  <motion.span
-                    className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full"
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "100%" }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                  />
-                </span>{" "}
-                Today
-              </motion.h2>
-
-              <motion.p
-                className="text-slate-300 text-xl leading-relaxed max-w-lg"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-              >
-                Experience our premium developments firsthand. Our expert team
-                will guide you through every detail with complimentary transport
-                from our Besa Square office.
-              </motion.p>
-
-              {/* Contact Info */}
-              <motion.div
-                className="flex flex-col sm:flex-row items-start sm:items-center gap-6 text-lg"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: 0.6 }}
-              >
-                <a
-                  href="tel:+919373233777"
-                  className="flex items-center gap-3 text-white/80 hover:text-cyan-300 transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-cyan-500/20 border border-cyan-400/30 rounded-2xl flex items-center justify-center group-hover:bg-cyan-500/30 transition-all">
-                    <Phone className="w-6 h-6 text-cyan-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-slate-400">Call Direct</div>
-                    <div className="font-bold">+91 93732 33777</div>
-                  </div>
-                </a>
-
-                <div className="hidden sm:block w-px h-12 bg-white/20" />
-
-                <a
-                  href="mailto:info@4pillarsrealty.com"
-                  className="flex items-center gap-3 text-white/80 hover:text-cyan-300 transition-colors group"
-                >
-                  <div className="w-12 h-12 bg-blue-500/20 border border-blue-400/30 rounded-2xl flex items-center justify-center group-hover:bg-blue-500/30 transition-all">
-                    <Mail className="w-6 h-6 text-blue-400" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-slate-400">Email Us</div>
-                    <div className="font-bold">info@4pillarsrealty.com</div>
-                  </div>
-                </a>
-              </motion.div>
+        <div className="relative z-10 max-w-[1100px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center px-0">
+          {/* LEFT COLUMN */}
+          <div className="opacity-0 animate-[fadeUp_0.9s_ease_forwards]">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7bbfff] bg-[#388bfd]/[0.12] border border-[#388bfd]/[0.25]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#7bbfff] animate-[pulseDot_2s_ease-in-out_infinite]" />
+              Premium Developments &middot; Nagpur
             </div>
 
-            {/* Right Column - Multi-Step Booking Form */}
-            <motion.div
-              initial={{ opacity: 0, x: 60, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-8 shadow-2xl"
-            >
-              {/* Progress Indicator */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-xl font-bold text-white">
-                    Schedule Your Visit
-                  </h3>
-                  <span className="text-sm text-cyan-300 font-mono">
-                    Step 1 of 3
-                  </span>
-                </div>
+            <h1 className="font-[Playfair_Display,Georgia,serif] font-black text-[clamp(2.4rem,4vw,3.4rem)] leading-[1.1] tracking-[-0.02em] text-[#f0f6ff] mb-6">
+              Your Next
+              <br />
+              <em className="relative inline-block not-italic bg-gradient-to-r from-[#7bbfff] to-[#a8d8ff] bg-clip-text text-transparent">
+                Investment
+                <span className="absolute -bottom-1 left-0 h-[3px] w-full origin-left rounded bg-gradient-to-r from-[#7bbfff] to-[#a8d8ff] animate-[growLine_1.2s_0.6s_ease_forwards] scale-x-0" />
+              </em>
+              <br />
+              Starts Here
+            </h1>
 
-                <div className="flex gap-2">
-                  {[1, 2, 3].map((step) => (
-                    <div
-                      key={step}
-                      className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden"
-                    >
-                      <motion.div
-                        className="h-full bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full"
-                        initial={{ width: step === 1 ? "100%" : "0%" }}
-                        animate={{ width: step === 1 ? "100%" : "0%" }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <p className="text-[#8ba0be] text-[1.05rem] leading-relaxed mb-10 max-w-[440px]">
+              Visit our experience centre and tour premium plots firsthand. Our
+              experts handle everything — including complimentary transport from
+              Besa Square.
+            </p>
 
-              {/* Step 1: Personal Information */}
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-white mb-2">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Enter your full name"
-                      className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white placeholder-slate-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-white mb-2">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="+91 XXXXX XXXXX"
-                      className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white placeholder-slate-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-white mb-2">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white placeholder-slate-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-white mb-2">
-                    Interested Project
-                  </label>
-                  <select className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all">
-                    <option value="" className="text-slate-900">
-                      Select a project
-                    </option>
-                    <option
-                      value="melbourne-city-sector-ii"
-                      className="text-slate-900"
-                    >
-                      Melbourne City Sector II
-                    </option>
-                    <option value="canberra-city" className="text-slate-900">
-                      Canberra City
-                    </option>
-                    <option
-                      value="shraddha-bhakti-avenue"
-                      className="text-slate-900"
-                    >
-                      Shraddha Bhakti Avenue
-                    </option>
-                    <option value="all-projects" className="text-slate-900">
-                      Show me all projects
-                    </option>
-                  </select>
-                </div>
-
-                {/* Calendar Widget Preview */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-cyan-400" />
-                    Preferred Visit Date & Time
-                  </h4>
-
-                  <div className="grid grid-cols-4 gap-3 mb-4">
-                    {["Today", "Tomorrow", "This Week", "Next Week"].map(
-                      (option, index) => (
-                        <motion.button
-                          key={option}
-                          className="p-3 rounded-xl text-xs font-semibold bg-white/10 text-white hover:bg-cyan-500/30 hover:text-cyan-100 transition-all border border-white/20"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.8 + index * 0.1 }}
-                        >
-                          {option}
-                        </motion.button>
-                      ),
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-2">
-                        Preferred Date
-                      </label>
-                      <input
-                        type="date"
-                        className="w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-2">
-                        Preferred Time
-                      </label>
-                      <select className="w-full bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all">
-                        <option value="" className="text-slate-900">
-                          Select time
-                        </option>
-                        <option value="morning" className="text-slate-900">
-                          Morning (9-12 AM)
-                        </option>
-                        <option value="afternoon" className="text-slate-900">
-                          Afternoon (12-4 PM)
-                        </option>
-                        <option value="evening" className="text-slate-900">
-                          Evening (4-7 PM)
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Special Requests */}
-                <div>
-                  <label className="block text-sm font-semibold text-white mb-2">
-                    Special Requests (Optional)
-                  </label>
-                  <textarea
-                    placeholder="Any specific requirements or questions about the visit?"
-                    rows={3}
-                    className="w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-white placeholder-slate-400 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all resize-none"
-                  />
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4 mt-8">
-                <motion.button
-                  className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 px-6 rounded-2xl uppercase tracking-wide transition-all shadow-xl hover:shadow-2xl"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() =>
-                    openLeadModal(
-                      "melbourne-city-sector-ii",
-                      "I would like to schedule a site visit with complimentary transport.",
-                    )
-                  }
-                >
-                  Schedule VIP Visit
-                </motion.button>
-
-                <motion.button
-                  className="bg-white/20 hover:bg-white/30 text-white font-bold py-4 px-6 rounded-2xl transition-all border border-white/30 hover:border-white/50 backdrop-blur-sm"
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Call Now
-                </motion.button>
-              </div>
-
-              {/* WhatsApp Integration */}
-              <motion.div
-                className="mt-6 p-4 bg-green-500/20 border border-green-400/30 rounded-2xl text-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
+            {/* CONTACT DETAILS */}
+            <div className="flex flex-col gap-4 mb-8">
+              <a
+                href="tel:+919373233777"
+                className="group flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4 transition-all duration-200 hover:bg-[#388bfd]/10 hover:border-[#388bfd]/30 hover:translate-x-1"
               >
-                <p className="text-green-300 text-sm mb-3 font-semibold">
-                  Prefer WhatsApp? Get instant confirmation!
-                </p>
-                <motion.button
-                  className="bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Phone className="w-4 h-4" />
-                  Book via WhatsApp
-                </motion.button>
-              </motion.div>
-            </motion.div>
+                <div className="relative w-11 h-11 shrink-0">
+                  <span className="absolute -inset-1.5 rounded-full border-2 border-[#388bfd]/35 animate-[ringPulse_2.5s_ease-in-out_infinite]" />
+                  <span className="absolute -inset-3 rounded-full border-2 border-[#388bfd]/35 opacity-50 animate-[ringPulse_2.5s_ease-in-out_infinite] [animation-delay:0.6s]" />
+                  <div className="relative z-10 w-11 h-11 rounded-xl flex items-center justify-center text-xl bg-[#388bfd]/[0.18] text-[#7bbfff]">
+                    <i className="ti ti-phone" aria-hidden="true" />
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[11px] tracking-wide text-[#5a7fa8] mb-0.5">
+                    Call direct
+                  </div>
+                  <div className="text-[0.95rem] font-semibold text-[#d8eaff]">
+                    +91 93732 33777
+                  </div>
+                </div>
+              </a>
 
-            {/* Office Location */}
-            <motion.div
-              className="mt-16 text-center"
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 max-w-3xl mx-auto">
-                <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2 justify-center">
-                  <MapPin className="w-5 h-5 text-cyan-400" />
-                  Visit Our Experience Center
-                </h3>
-                <p className="text-slate-300 mb-4 leading-relaxed">
-                  Plot No. 52-71, Gouri Meadows II, Wing-B, Behind Indian Oil
-                  Petrol Pump, Besa Square, New Nagpur, Maharashtra
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <span className="text-sm text-cyan-300 font-semibold flex items-center gap-1">
-                    <Globe className="w-4 h-4" /> Open Mon-Sat: 9 AM - 7 PM
-                  </span>
-                  <span className="text-sm text-cyan-300 font-semibold flex items-center gap-1">
-                    <Phone className="w-4 h-4" /> Free Site Transport
-                  </span>
-                  <span className="text-sm text-cyan-300 font-semibold flex items-center gap-1">
-                    <Users className="w-4 h-4" /> Expert Consultation
-                  </span>
+              <a
+                href="mailto:info@4pillarsrealty.com"
+                className="group flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4 transition-all duration-200 hover:bg-[#388bfd]/10 hover:border-[#388bfd]/30 hover:translate-x-1"
+              >
+                <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-xl bg-[#64c8dc]/[0.15] text-[#7dd4e8]">
+                  <i className="ti ti-mail" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="text-[11px] tracking-wide text-[#5a7fa8] mb-0.5">
+                    Email us
+                  </div>
+                  <div className="text-[0.95rem] font-semibold text-[#d8eaff]">
+                    info@4pillarsrealty.com
+                  </div>
+                </div>
+              </a>
+
+              <div className="flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4">
+                <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-xl bg-[#8c64f0]/[0.15] text-[#b89ef8]">
+                  <i className="ti ti-map-pin" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="text-[11px] tracking-wide text-[#5a7fa8] mb-0.5">
+                    Experience centre
+                  </div>
+                  <div className="text-[0.95rem] font-semibold text-[#d8eaff]">
+                    Plot 52–71, Gouri Meadows II, Besa Square, Nagpur
+                  </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
+
+            <a
+              href="/contact"
+              className="group inline-flex items-center gap-2.5 rounded-xl px-8 py-3.5 text-[0.95rem] font-semibold text-white tracking-[0.01em] transition-all duration-200 bg-gradient-to-br from-[#1a6fd4] to-[#2563a8] hover:from-[#2278e0] hover:to-[#2d70bb] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,111,212,0.35)]"
+            >
+              Book a site visit
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              >
+                <path d="M5 12h14" />
+                <path d="M12 5l7 7-7 7" />
+              </svg>
+            </a>
           </div>
-        </motion.div>
+
+          {/* RIGHT COLUMN — card */}
+          <div className="opacity-0 animate-[fadeUp_0.9s_0.25s_ease_forwards]">
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-10 backdrop-blur-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-[#4a9ef0] before:to-transparent">
+              <div className="inline-flex items-center gap-1.5 rounded-lg border border-[#388bfd]/20 bg-[#388bfd]/[0.15] px-3 py-1 text-xs font-semibold tracking-wide text-[#7bbfff] mb-6">
+                <i className="ti ti-building-estate" aria-hidden="true" />4
+                Pillars Realty
+              </div>
+
+              <div className="font-[Playfair_Display,serif] text-[1.6rem] font-bold text-[#eef4ff] mb-2">
+                Schedule Your Visit
+              </div>
+              <div className="text-[0.9rem] leading-relaxed text-[#6a8fb0] mb-8">
+                Walk the land, see the neighbourhood, and make a confident
+                decision with our expert team by your side.
+              </div>
+
+              <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-4 mb-4 text-[0.875rem] leading-relaxed text-[#8ba0be]">
+                <i
+                  className="ti ti-clock mt-px shrink-0 text-lg text-[#b89ef8]"
+                  aria-hidden="true"
+                />
+                <span>
+                  Visits available Monday to Saturday, 9 AM – 7 PM. A dedicated
+                  consultant is assigned for your tour.
+                </span>
+              </div>
+
+              <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-4 mb-4 text-[0.875rem] leading-relaxed text-[#8ba0be]">
+                <i
+                  className="ti ti-shield-check mt-px shrink-0 text-lg text-[#7bbfff]"
+                  aria-hidden="true"
+                />
+                <span>
+                  All projects are RERA approved. No hidden charges, no
+                  obligation — just an honest conversation.
+                </span>
+              </div>
+
+              <div className="flex gap-2.5 mt-6">
+                <a
+                  href="/contact"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-[0.9rem] font-semibold text-white transition-all duration-200 bg-gradient-to-br from-[#1a6fd4] to-[#2563a8] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,111,212,0.35)]"
+                >
+                  <i className="ti ti-calendar" aria-hidden="true" />
+                  Schedule visit
+                </a>
+                <a
+                  href="https://wa.me/919373233777"
+                  className="flex items-center gap-1.5 whitespace-nowrap rounded-xl border border-[#25d366]/30 bg-[#25d366]/[0.15] px-5 py-3.5 text-[0.9rem] font-semibold text-[#4fcf7a] transition-all duration-200 hover:bg-[#25d366]/[0.22] hover:-translate-y-0.5"
+                >
+                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  WhatsApp
+                </a>
+              </div>
+
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 text-[11px] tracking-wide text-[#4a6890]">
+                <i className="ti ti-clock-hour-4 text-sm" aria-hidden="true" />
+                Mon–Sat &middot; 9 AM – 7 PM
+                <span className="w-1 h-1 rounded-full bg-[#2a4870]" />
+                Free transport included
+                <span className="w-1 h-1 rounded-full bg-[#2a4870]" />
+                No obligation
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

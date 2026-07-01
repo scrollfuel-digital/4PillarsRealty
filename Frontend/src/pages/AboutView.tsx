@@ -1,5 +1,5 @@
-
 import { useEffect, useRef, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { BRAND_COLORS } from '../data';
 
 interface AboutViewProps {
@@ -80,7 +80,8 @@ const pillars = [
   },
 ];
 
-export default function AboutView({ lightMode, accessibilityTextSize }: AboutViewProps) {
+export default function AboutView() {
+  const { lightMode, accessibilityTextSize } = useOutletContext<AboutViewProps>();
   const hero = useInView(0.1);
   const grid = useInView(0.1);
   const pillarsSection = useInView(0.05);

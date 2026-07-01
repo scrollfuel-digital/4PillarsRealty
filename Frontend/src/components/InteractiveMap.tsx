@@ -1,10 +1,10 @@
 import { useState } from 'react';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PROJECTS, BRAND_COLORS } from '../data';
 import { Project } from '../types';
 import { MapPin, Info, Check, Sparkles, Navigation } from 'lucide-react';
 
 interface InteractiveMapProps {
-  onSelectProject: (slug: string) => void;
   openLeadModal: (projectSlug: string, initialMessage?: string) => void;
   accessibilityTextSize: 'sm' | 'md' | 'lg' | 'xl';
   lightMode: boolean;
@@ -30,7 +30,10 @@ const generatePlots = (projectId: string) => {
   return plots;
 };
 
-export default function InteractiveMap({ onSelectProject, openLeadModal, accessibilityTextSize, lightMode }: InteractiveMapProps) {
+export default function InteractiveMap() {
+  const { openLeadModal, accessibilityTextSize, lightMode } = useOutletContext<InteractiveMapProps>();
+  const navigate = useNavigate();
+  const onSelectProject = (slug: string) => navigate(`/${slug}`);
   const [selectedMapProject, setSelectedMapProject] = useState<Project | null>(PROJECTS[0]);
   const [selectedSubLayout, setSelectedSubLayout] = useState<string>('melbourne-city-sector-ii');
   const [hoveredPlot, setHoveredPlot] = useState<any | null>(null);

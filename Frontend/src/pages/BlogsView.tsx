@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { BLOGS, BRAND_COLORS } from '../data';
 import { Blog } from '../types';
 import { BookOpen, Calendar, Clock, X, ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
@@ -6,10 +8,11 @@ import { BookOpen, Calendar, Clock, X, ArrowLeft, ArrowRight, Sparkles } from 'l
 interface BlogsViewProps {
   lightMode: boolean;
   accessibilityTextSize: 'sm' | 'md' | 'lg' | 'xl';
-  onChangeRoute: (route: string) => void;
 }
 
-export default function BlogsView({ lightMode, accessibilityTextSize, onChangeRoute }: BlogsViewProps) {
+export default function BlogsView() {
+  const { lightMode, accessibilityTextSize } = useOutletContext<BlogsViewProps>();
+  const navigate = useNavigate();
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   const getHeadingClass = () => {
@@ -78,7 +81,7 @@ export default function BlogsView({ lightMode, accessibilityTextSize, onChangeRo
             </div>
             <button
               onClick={() => {
-                onChangeRoute('contact');
+                navigate('/contact');
                 window.scrollTo({ top: 0 });
               }}
               className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-xl text-xs shrink-0"

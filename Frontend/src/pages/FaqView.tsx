@@ -1,14 +1,17 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { FAQS, BRAND_COLORS } from '../data';
 import { Sparkles, HelpCircle, ChevronDown, CheckCircle } from 'lucide-react';
 
 interface FaqViewProps {
   lightMode: boolean;
   accessibilityTextSize: 'sm' | 'md' | 'lg' | 'xl';
-  onChangeRoute: (route: string) => void;
 }
 
-export default function FaqView({ lightMode, accessibilityTextSize, onChangeRoute }: FaqViewProps) {
+export default function FaqView() {
+  const { lightMode, accessibilityTextSize } = useOutletContext<FaqViewProps>();
+  const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const getHeadingClass = () => {
@@ -102,7 +105,7 @@ export default function FaqView({ lightMode, accessibilityTextSize, onChangeRout
         <p className="text-slate-500 text-[11px] mb-4">Our on-site legal counselors provide complete physical brochure dossiers free of charge.</p>
         <button
           onClick={() => {
-            onChangeRoute('contact');
+            navigate('/contact');
             window.scrollTo({ top: 0 });
           }}
           className="bg-blue-600 hover:bg-blue-500 text-white font-mono text-[10px] uppercase font-bold py-2 px-4 rounded-xl"
