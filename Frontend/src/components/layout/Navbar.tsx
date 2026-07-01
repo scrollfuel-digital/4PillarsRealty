@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { User } from "../../types";
 import {
@@ -18,26 +19,28 @@ import {
 const logo1 = "/images/logo1.png";
 
 interface NavbarProps {
-  currentRoute: string;
-  onChangeRoute: (route: string) => void;
   openSearch: () => void;
   user: User;
   onLoginSuccess: (user: any) => void;
   onLogout: () => void;
   lightMode: boolean;
   toggleLightMode?: () => void;
+  accessibilityHighContrast?: boolean;
+  setAccessibilityHighContrast?: (contrast: boolean) => void;
 }
 
 export default function Navbar({
-  currentRoute,
-  onChangeRoute,
   openSearch,
   user,
   onLoginSuccess,
   onLogout,
   lightMode,
   toggleLightMode,
+  accessibilityHighContrast,
+  setAccessibilityHighContrast,
 }: NavbarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showPortalCard, setShowPortalCard] = useState(false);
@@ -80,14 +83,14 @@ export default function Navbar({
   }, []);
 
   const navLinks = [
-    { label: "Home", route: "home", hasSubmenu: false, icon: Home },
-    { label: "About Us", route: "about", hasSubmenu: false, icon: Building2 },
-    { label: "Projects", route: "projects", hasSubmenu: false, icon: MapPin },
-    { label: "Contact Us", route: "contact", hasSubmenu: false, icon: Phone },
+    { label: "Home", route: "home", path: "/", icon: Home },
+    { label: "About Us", route: "about", path: "/about", icon: Building2 },
+    { label: "Projects", route: "projects", path: "/projects", icon: MapPin },
+    { label: "Contact Us", route: "contact", path: "/contact", icon: Phone },
   ];
 
-  const handleLinkClick = (route: string) => {
-    onChangeRoute(route);
+  const handleLinkClick = (path: string) => {
+    navigate(path);
     setMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -112,7 +115,7 @@ export default function Navbar({
           transition={{ duration: 0.3 }}
         >
           <motion.button
-            onClick={() => handleLinkClick("home")}
+            onClick={() => handleLinkClick("/")}
             className="p-2"
             aria-label="4 Pillars Corporate Homepage"
             whileTap={{ scale: 0.95 }}
@@ -120,7 +123,7 @@ export default function Navbar({
             <motion.img
               src={logo1}
               alt="4 Pillars logo"
-              className={`transition-all duration-500 object-contain pl-40 ${
+              className={`transition-all duration-500 object-contain lg:pl-40 ${
                 scrolled ? "h-25 w-auto" : "h-25 w-auto"
               }`}
             />
@@ -129,47 +132,38 @@ export default function Navbar({
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center space-x-1 ">
-          {navLinks.map((link, index) => (
-            <div key={link.route} className="relative group">
-              <motion.button
-                onClick={() => {
-                  if (link.hasSubmenu) {
-                    setShowProjectsDropdown(!showProjectsDropdown);
-                  } else {
-                    handleLinkClick(link.route);
-                  }
-                }}
-                onMouseEnter={() =>
-                  link.hasSubmenu && setShowProjectsDropdown(true)
-                }
-                className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold text-sm transition-all relative overflow-hidden group ${
-                  currentRoute === link.route
-                    ? "text-blue-600 bg-amber-50/80 backdrop-blur-sm"
-                    : scrolled
-                      ? "text-slate-700 hover:text-blue-600 hover:bg-amber-50/50"
-                      : "text-blue-900 hover:text-blue-500 hover:bg-white/10"
-                }`}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <link.icon className="w-4 h-4" />
-                <span>{link.label}</span>
-               
-                <motion.div
-                  className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full ${
-                    currentRoute === link.route
-                      ? "w-full"
-                      : "w-0 group-hover:w-full"
+          {navLinks.map((link, index) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <div key={link.route} className="relative group">
+                <motion.button
+                  onClick={() => handleLinkClick(link.path)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold text-sm transition-all relative overflow-hidden group ${
+                    isActive
+                      ? "text-blue-600 bg-amber-50/80 backdrop-blur-sm"
+                      : scrolled
+                        ? "text-slate-700 hover:text-blue-600 hover:bg-amber-50/50"
+                        : "text-blue-900 hover:text-blue-500 hover:bg-white/10"
                   }`}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <link.icon className="w-4.5 h-4.5" />
+                  <span>{link.label}</span>
 
-            </div>
-          ))}
+                  <motion.div
+                    className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.button>
+              </div>
+            );
+          })}
         </div>
 
         {/* Right Side Actions */}
@@ -220,7 +214,7 @@ export default function Navbar({
             className={`lg:hidden p-3 rounded-2xl transition-all ${
               scrolled
                 ? "bg-slate-100 text-slate-700"
-                : "bg-white/10 text-white"
+                : "bg-white/10 text-cyan-400"
             }`}
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
@@ -293,7 +287,7 @@ export default function Navbar({
                       <motion.button
                         key={project.route}
                         onClick={() => {
-                          handleLinkClick(project.route);
+                          handleLinkClick(`/${project.route}`);
                           setShowSearch(false);
                           setSearchQuery("");
                         }}
@@ -350,8 +344,8 @@ export default function Navbar({
             {/* Mobile Header */}
             <div className="flex items-center justify-between p-6 border-b border-slate-200/50">
               <div className="flex items-center gap-3">
-                <img src={logo1} alt="4 Pillars" className="h-8 w-auto" />
-                <span className="font-bold text-slate-900">Menu</span>
+                <img src={logo1} alt="4 Pillars" className="h-25 w-auto" />
+                
               </div>
               <motion.button
                 onClick={() => setMobileMenuOpen(false)}
@@ -366,7 +360,7 @@ export default function Navbar({
             {/* Mobile Navigation */}
             <div className="flex-1 p-6 space-y-4">
               {navLinks.map((link, i) => {
-                const isActive = currentRoute === link.route;
+                const isActive = location.pathname === link.path;
                 return (
                   <motion.div
                     key={link.route}
@@ -375,7 +369,7 @@ export default function Navbar({
                     transition={{ delay: i * 0.1 }}
                   >
                     <motion.button
-                      onClick={() => handleLinkClick(link.route)}
+                      onClick={() => handleLinkClick(link.path)}
                       className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all group ${
                         isActive
                           ? "bg-blue-50 text-blue-600 border-2 border-blue-200"
@@ -396,32 +390,7 @@ export default function Navbar({
                       <span className="font-semibold text-lg">
                         {link.label}
                       </span>
-                      {link.hasSubmenu && (
-                        <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-blue-600 ml-auto" />
-                      )}
                     </motion.button>
-
-                    {/* Mobile Projects Submenu */}
-                    {link.hasSubmenu && isActive && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        className="mt-3 ml-6 space-y-2"
-                      >
-                        {projects.map((project, pIndex) => (
-                          <motion.button
-                            key={project.route}
-                            onClick={() => handleLinkClick(project.route)}
-                            className="w-full text-left p-3 rounded-xl text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 transition-all"
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: pIndex * 0.05 }}
-                          >
-                            {project.name}
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
                   </motion.div>
                 );
               })}
@@ -430,7 +399,10 @@ export default function Navbar({
             {/* Mobile Footer */}
             <div className="p-6 border-t border-slate-200/50">
               <motion.button
-                onClick={() => setShowSearch(true)}
+                onClick={() => {
+                  setShowSearch(true);
+                  setMobileMenuOpen(false);
+                }}
                 className="w-full flex items-center gap-3 p-4 rounded-2xl bg-slate-100 text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-all"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
