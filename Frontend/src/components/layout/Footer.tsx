@@ -51,10 +51,10 @@ export default function Footer({ lightMode }: FooterProps) {
       <div className="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-10 gap-8 sm:gap-10 mb-8">
           {/* Logo + Social — logo left, socials right, on the same row at every size */}
-          <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-row items-center justify-between sm:flex-col sm:items-start sm:justify-start gap-4 sm:gap-5">
+          <div className="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-row items-center justify-between sm:flex-col sm:items-start sm:justify-start gap-4 sm:gap-5 sm:pl-20">
             <button
               onClick={() => handleNavigate("/")}
-              className="hover:opacity-90 transition-all duration-300 sm:pl-4"
+              className="hover:opacity-90 transition-all duration-300 "
               aria-label="4 Pillars Corporate Homepage"
             >
               <img
