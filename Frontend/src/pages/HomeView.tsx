@@ -38,6 +38,9 @@ import {
   Search,
   FileText,
   Landmark,
+  Clock,
+  Calendar,
+  MessageCircle,
 } from "lucide-react";
 
 interface HomeViewProps {
@@ -380,7 +383,8 @@ function FeatureItem({ card, delay }: { card: FeatureCard; delay: number }) {
 
 /* ─── MAIN COMPONENT ─────────────────────────────────────────────────────── */
 export default function HomeView() {
-  const { openLeadModal, accessibilityTextSize, lightMode } = useOutletContext<HomeViewProps>();
+  const { openLeadModal, accessibilityTextSize, lightMode } =
+    useOutletContext<HomeViewProps>();
   const navigate = useNavigate();
   const onSelectProject = (slug: string) => navigate(`/${slug}`);
   const onChangeRoute = (route: string) => navigate(`/${route}`);
@@ -460,7 +464,7 @@ export default function HomeView() {
     <div className="flex flex-col bg-white">
       <section
         ref={heroRef}
-        className="relative h-screen flex items-center justify-center overflow-hidden"
+        className="relative h-screen min-h-[100svh] flex items-center justify-center overflow-hidden"
         aria-label="Welcome Introduction Banner"
       >
         <motion.div className="absolute inset-0 z-0" style={{ y: heroY }}>
@@ -470,7 +474,9 @@ export default function HomeView() {
             muted
             loop
             playsInline
-            className="w-full h-full object-cover"
+            webkit-playsinline="true"
+            preload="auto"
+            className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-black/55 z-10" />
         </motion.div>
@@ -499,7 +505,7 @@ export default function HomeView() {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
               >
-                <span className=" pl-4">{rotatingPhrases[rotatingText]}</span>
+                <span className="pl-4">{rotatingPhrases[rotatingText]}</span>
               </motion.div>
 
               {/* Description */}
@@ -950,7 +956,6 @@ export default function HomeView() {
             transition={{ duration: 0.6, delay: 1 }}
           >
             {activeProjects.map((proj, idx) => {
-              // Pull BHK/area type info from specs array, fallback gracefully
               const typeSpec = proj.specs?.find((s) =>
                 /bhk|type|unit/i.test(s.label),
               );
@@ -968,13 +973,13 @@ export default function HomeView() {
                   transition={{ duration: 0.8, delay: 0.1 + idx * 0.2 }}
                   whileHover={{ y: -8 }}
                 >
-                  {/* Base color block */}
+                  {/* Base color block — hidden on mobile, shown by default on desktop, fades on hover */}
                   <div
-                    className={`absolute inset-0 z-10 ${
+                    className={`absolute inset-0 z-10 opacity-0 md:opacity-100 ${
                       idx % 2 === 0
                         ? "bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800"
                         : "bg-white"
-                    } transition-opacity duration-500 group-hover:opacity-0 group-hover:pointer-events-none`}
+                    } transition-opacity duration-500 md:group-hover:opacity-0 md:group-hover:pointer-events-none pointer-events-none md:pointer-events-auto`}
                   >
                     <div className="absolute top-4 left-4">
                       <span
@@ -1018,9 +1023,9 @@ export default function HomeView() {
                     </div>
                   </div>
 
-                  {/* Hover layer: photo + details */}
+                  {/* Hover layer: photo + details — visible by default on mobile, hover-only on desktop */}
                   <motion.div
-                    className="absolute inset-0 z-20 bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    className="absolute inset-0 z-20 bg-cover bg-center opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500"
                     style={{ backgroundImage: `url(${proj.image})` }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
@@ -1474,44 +1479,41 @@ export default function HomeView() {
             "linear-gradient(135deg, #0a1628 0%, #0f2347 40%, #132a52 70%, #0d1f3c 100%)",
         }}
       >
-        {/* grid overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(56,139,253,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(56,139,253,0.04) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-          }}
-        />
-
         {/* glow blobs */}
         <div
           className="absolute -top-[120px] -right-20 w-[480px] h-[480px] rounded-full pointer-events-none animate-[blobFloat_8s_ease-in-out_infinite]"
           style={{
             background:
-              "radial-gradient(circle, rgba(56,139,253,0.12) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(56,139,253,0.14) 0%, transparent 70%)",
           }}
         />
         <div
           className="absolute -bottom-[100px] -left-[60px] w-[360px] h-[360px] rounded-full pointer-events-none animate-[blobFloat_10s_ease-in-out_infinite_reverse]"
           style={{
             background:
-              "radial-gradient(circle, rgba(100,200,255,0.07) 0%, transparent 70%)",
+              "radial-gradient(circle, rgba(100,200,255,0.08) 0%, transparent 70%)",
+          }}
+        />
+        <div
+          className="absolute top-1/3 left-1/2 w-[300px] h-[300px] rounded-full pointer-events-none animate-[blobFloat_12s_ease-in-out_infinite]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(140,100,240,0.06) 0%, transparent 70%)",
           }}
         />
 
-        <div className="relative z-10 max-w-[1100px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center px-0">
+        <div className="relative z-10 max-w-[1120px] w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center px-0">
           {/* LEFT COLUMN */}
           <div className="opacity-0 animate-[fadeUp_0.9s_ease_forwards]">
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7bbfff] bg-[#388bfd]/[0.12] border border-[#388bfd]/[0.25]">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7bbfff] bg-[#388bfd]/[0.12] border border-[#388bfd]/[0.25] shadow-[0_0_20px_rgba(56,139,253,0.08)]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#7bbfff] animate-[pulseDot_2s_ease-in-out_infinite]" />
               Premium Developments &middot; Nagpur
             </div>
 
-            <h1 className="font-[Playfair_Display,Georgia,serif] font-black text-[clamp(2.4rem,4vw,3.4rem)] leading-[1.1] tracking-[-0.02em] text-[#f0f6ff] mb-6">
+            <h1 className="font-[Playfair_Display,Georgia,serif] font-black text-[clamp(2.4rem,4vw,3.5rem)] leading-[1.1] tracking-[-0.02em] text-[#f0f6ff] mb-6">
               Your Next
               <br />
-              <em className="relative inline-block not-italic bg-gradient-to-r from-[#7bbfff] to-[#a8d8ff] bg-clip-text text-transparent">
+              <em className="relative inline-block not-italic bg-gradient-to-r from-[#7bbfff] via-[#9cd0ff] to-[#a8d8ff] bg-clip-text text-transparent">
                 Investment
                 <span className="absolute -bottom-1 left-0 h-[3px] w-full origin-left rounded bg-gradient-to-r from-[#7bbfff] to-[#a8d8ff] animate-[growLine_1.2s_0.6s_ease_forwards] scale-x-0" />
               </em>
@@ -1526,16 +1528,16 @@ export default function HomeView() {
             </p>
 
             {/* CONTACT DETAILS */}
-            <div className="flex flex-col gap-4 mb-8">
+            <div className="flex flex-col gap-3.5 mb-9">
               <a
                 href="tel:+919373233777"
-                className="group flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4 transition-all duration-200 hover:bg-[#388bfd]/10 hover:border-[#388bfd]/30 hover:translate-x-1"
+                className="group flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4 transition-all duration-300 hover:bg-[#388bfd]/[0.1] hover:border-[#388bfd]/30 hover:translate-x-1.5 hover:shadow-[0_8px_28px_rgba(56,139,253,0.12)]"
               >
-                <div className="relative w-11 h-11 shrink-0">
+                <div className="relative w-12 h-12 shrink-0">
                   <span className="absolute -inset-1.5 rounded-full border-2 border-[#388bfd]/35 animate-[ringPulse_2.5s_ease-in-out_infinite]" />
                   <span className="absolute -inset-3 rounded-full border-2 border-[#388bfd]/35 opacity-50 animate-[ringPulse_2.5s_ease-in-out_infinite] [animation-delay:0.6s]" />
-                  <div className="relative z-10 w-11 h-11 rounded-xl flex items-center justify-center text-xl bg-[#388bfd]/[0.18] text-[#7bbfff]">
-                    <i className="ti ti-phone" aria-hidden="true" />
+                  <div className="relative z-10 w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#388bfd]/25 to-[#388bfd]/[0.1] text-[#7bbfff] border border-[#388bfd]/20">
+                    <Phone className="w-5 h-5" strokeWidth={2} />
                   </div>
                 </div>
                 <div>
@@ -1546,14 +1548,18 @@ export default function HomeView() {
                     +91 93732 33777
                   </div>
                 </div>
+                <ArrowRight
+                  className="w-4 h-4 ml-auto text-[#4a6890] opacity-0 group-hover:opacity-100 group-hover:text-[#7bbfff] transition-all duration-300"
+                  strokeWidth={2.5}
+                />
               </a>
 
               <a
                 href="mailto:info@4pillarsrealty.com"
-                className="group flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4 transition-all duration-200 hover:bg-[#388bfd]/10 hover:border-[#388bfd]/30 hover:translate-x-1"
+                className="group flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4 transition-all duration-300 hover:bg-[#64c8dc]/[0.08] hover:border-[#64c8dc]/30 hover:translate-x-1.5 hover:shadow-[0_8px_28px_rgba(100,200,220,0.12)]"
               >
-                <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-xl bg-[#64c8dc]/[0.15] text-[#7dd4e8]">
-                  <i className="ti ti-mail" aria-hidden="true" />
+                <div className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#64c8dc]/25 to-[#64c8dc]/[0.1] text-[#7dd4e8] border border-[#64c8dc]/20">
+                  <Mail className="w-5 h-5" strokeWidth={2} />
                 </div>
                 <div>
                   <div className="text-[11px] tracking-wide text-[#5a7fa8] mb-0.5">
@@ -1563,102 +1569,102 @@ export default function HomeView() {
                     info@4pillarsrealty.com
                   </div>
                 </div>
+                <ArrowRight
+                  className="w-4 h-4 ml-auto text-[#4a6890] opacity-0 group-hover:opacity-100 group-hover:text-[#7dd4e8] transition-all duration-300"
+                  strokeWidth={2.5}
+                />
               </a>
 
-              <div className="flex items-center gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4">
-                <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center text-xl bg-[#8c64f0]/[0.15] text-[#b89ef8]">
-                  <i className="ti ti-map-pin" aria-hidden="true" />
+              <div className="flex items-start gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.04] px-5 py-4">
+                <div className="w-12 h-12 shrink-0 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#8c64f0]/25 to-[#8c64f0]/[0.1] text-[#b89ef8] border border-[#8c64f0]/20">
+                  <MapPin className="w-5 h-5" strokeWidth={2} />
                 </div>
                 <div>
                   <div className="text-[11px] tracking-wide text-[#5a7fa8] mb-0.5">
                     Experience centre
                   </div>
-                  <div className="text-[0.95rem] font-semibold text-[#d8eaff]">
+                  <div className="text-[0.95rem] font-semibold text-[#d8eaff] leading-snug">
                     Plot 52–71, Gouri Meadows II, Besa Square, Nagpur
                   </div>
                 </div>
               </div>
             </div>
-
             <a
               href="/contact"
-              className="group inline-flex items-center gap-2.5 rounded-xl px-8 py-3.5 text-[0.95rem] font-semibold text-white tracking-[0.01em] transition-all duration-200 bg-gradient-to-br from-[#1a6fd4] to-[#2563a8] hover:from-[#2278e0] hover:to-[#2d70bb] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,111,212,0.35)]"
+              className="group inline-flex items-center gap-2.5 rounded-xl px-8 py-3.5 text-[0.95rem] font-semibold text-white tracking-[0.01em] transition-all duration-300 bg-gradient-to-br from-[#1a6fd4] to-[#2563a8] hover:from-[#2278e0] hover:to-[#2d70bb] hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(26,111,212,0.4)]"
             >
               Book a site visit
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="transition-transform duration-200 group-hover:translate-x-1"
-              >
-                <path d="M5 12h14" />
-                <path d="M12 5l7 7-7 7" />
-              </svg>
+              <ArrowRight
+                className="w-[18px] h-[18px] transition-transform duration-300 group-hover:translate-x-1"
+                strokeWidth={2.5}
+              />
             </a>
           </div>
 
-          {/* RIGHT COLUMN — card */}
+          {/* RIGHT COLUMN — form card */}
           <div className="opacity-0 animate-[fadeUp_0.9s_0.25s_ease_forwards]">
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-10 backdrop-blur-md before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:bg-gradient-to-r before:from-transparent before:via-[#4a9ef0] before:to-transparent">
-              <div className="inline-flex items-center gap-1.5 rounded-lg border border-[#388bfd]/20 bg-[#388bfd]/[0.15] px-3 py-1 text-xs font-semibold tracking-wide text-[#7bbfff] mb-6">
-                <i className="ti ti-building-estate" aria-hidden="true" />4
-                Pillars Realty
+            <div className="relative overflow-hidden rounded-[28px] border border-white/[0.09] bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-8 sm:p-10 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.35)] before:absolute before:inset-x-0 before:top-0 before:h-[2px] before:bg-gradient-to-r before:from-transparent before:via-[#4a9ef0] before:to-transparent">
+              {/* corner glow accent */}
+              <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-[#388bfd]/[0.15] blur-3xl pointer-events-none" />
+
+              <div className="relative inline-flex items-center gap-1.5 rounded-lg border border-[#388bfd]/20 bg-[#388bfd]/[0.15] px-3 py-1 text-xs font-semibold tracking-wide text-[#7bbfff] mb-6">
+                <Building2 className="w-3.5 h-3.5" strokeWidth={2} />4 Pillars
+                Realty
               </div>
 
-              <div className="font-[Playfair_Display,serif] text-[1.6rem] font-bold text-[#eef4ff] mb-2">
+              <div className="relative font-[Playfair_Display,serif] text-[1.7rem] font-bold text-[#eef4ff] mb-2">
                 Schedule Your Visit
               </div>
-              <div className="text-[0.9rem] leading-relaxed text-[#6a8fb0] mb-8">
+              <div className="relative text-[0.9rem] leading-relaxed text-[#6a8fb0] mb-8">
                 Walk the land, see the neighbourhood, and make a confident
                 decision with our expert team by your side.
               </div>
 
-              <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-4 mb-4 text-[0.875rem] leading-relaxed text-[#8ba0be]">
-                <i
-                  className="ti ti-clock mt-px shrink-0 text-lg text-[#b89ef8]"
-                  aria-hidden="true"
-                />
-                <span>
+              <div className="relative flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.035] p-4 mb-3.5 text-[0.875rem] leading-relaxed text-[#8ba0be] transition-colors duration-300 hover:border-[#b89ef8]/20">
+                <div className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center bg-[#8c64f0]/[0.15]">
+                  <Clock
+                    className="w-[18px] h-[18px] text-[#b89ef8]"
+                    strokeWidth={2}
+                  />
+                </div>
+                <span className="pt-1">
                   Visits available Monday to Saturday, 9 AM – 7 PM. A dedicated
                   consultant is assigned for your tour.
                 </span>
               </div>
 
-              <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/[0.03] p-4 mb-4 text-[0.875rem] leading-relaxed text-[#8ba0be]">
-                <i
-                  className="ti ti-shield-check mt-px shrink-0 text-lg text-[#7bbfff]"
-                  aria-hidden="true"
-                />
-                <span>
+              <div className="relative flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.035] p-4 mb-6 text-[0.875rem] leading-relaxed text-[#8ba0be] transition-colors duration-300 hover:border-[#7bbfff]/20">
+                <div className="w-8 h-8 shrink-0 rounded-lg flex items-center justify-center bg-[#388bfd]/[0.15]">
+                  <ShieldCheck
+                    className="w-[18px] h-[18px] text-[#7bbfff]"
+                    strokeWidth={2}
+                  />
+                </div>
+                <span className="pt-1">
                   All projects are RERA approved. No hidden charges, no
                   obligation — just an honest conversation.
                 </span>
               </div>
 
-              <div className="flex gap-2.5 mt-6">
+              <div className="relative flex flex-col sm:flex-row gap-2.5">
                 <a
                   href="/contact"
-                  className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-[0.9rem] font-semibold text-white transition-all duration-200 bg-gradient-to-br from-[#1a6fd4] to-[#2563a8] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(26,111,212,0.35)]"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-[0.9rem] font-semibold text-white transition-all duration-300 bg-gradient-to-br from-[#1a6fd4] to-[#2563a8] hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(26,111,212,0.4)]"
                 >
-                  <i className="ti ti-calendar" aria-hidden="true" />
+                  <Calendar className="w-4 h-4" strokeWidth={2} />
                   Schedule visit
                 </a>
                 <a
                   href="https://wa.me/919373233777"
-                  className="flex items-center gap-1.5 whitespace-nowrap rounded-xl border border-[#25d366]/30 bg-[#25d366]/[0.15] px-5 py-3.5 text-[0.9rem] font-semibold text-[#4fcf7a] transition-all duration-200 hover:bg-[#25d366]/[0.22] hover:-translate-y-0.5"
+                  className="flex items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-[#25d366]/30 bg-[#25d366]/[0.15] px-5 py-3.5 text-[0.9rem] font-semibold text-[#4fcf7a] transition-all duration-300 hover:bg-[#25d366]/[0.22] hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(37,211,102,0.2)]"
                 >
-                  <i className="ti ti-brand-whatsapp" aria-hidden="true" />
+                  <MessageCircle className="w-4 h-4" strokeWidth={2} />
                   WhatsApp
                 </a>
               </div>
 
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-1.5 text-[11px] tracking-wide text-[#4a6890]">
-                <i className="ti ti-clock-hour-4 text-sm" aria-hidden="true" />
+              <div className="relative mt-6 pt-5 border-t border-white/[0.06] flex flex-wrap items-center justify-center gap-1.5 text-[11px] tracking-wide text-[#4a6890]">
+                <Clock className="w-3.5 h-3.5" strokeWidth={2} />
                 Mon–Sat &middot; 9 AM – 7 PM
                 <span className="w-1 h-1 rounded-full bg-[#2a4870]" />
                 Free transport included
